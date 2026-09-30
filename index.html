@@ -16,7 +16,9 @@
           <p class="eyebrow">Hej Selma!</p>
           <h1>Regnemagi</h1>
         </div>
-        <button class="reset-button" id="reset-button" type="button">Start forfra</button>
+        <button class="reset-button" id="reset-button" type="button">
+          <span aria-hidden="true">↻</span> Start forfra
+        </button>
       </header>
 
       <main>
@@ -50,11 +52,11 @@
             <span class="mascot-ear mascot-ear-right"></span>
             <span class="mascot-face">•ᴗ•</span>
           </div>
-          <p class="task-label" id="task-heading">Hvad giver det?</p>
+          <p class="task-label" id="task-heading"><span aria-hidden="true">?</span> Hvad giver det?</p>
           <div class="equation" id="equation" aria-live="polite"></div>
 
           <form id="answer-form" novalidate>
-            <label for="answer">Dit svar</label>
+            <label for="answer"><span aria-hidden="true">✎</span> Dit svar</label>
             <div class="answer-row">
               <input
                 id="answer"
@@ -84,11 +86,13 @@
           </form>
 
           <div class="feedback" id="feedback" aria-live="assertive" role="status"></div>
-          <button class="next-button" id="next-button" type="button" hidden>Næste opgave →</button>
+          <button class="next-button" id="next-button" type="button" hidden>
+            Næste opgave <span aria-hidden="true">→</span>
+          </button>
           <div class="skip-controls" id="skip-controls">
-            <button type="button" data-difficulty="down">For svært</button>
-            <span id="skip-count">Sprunget over: 0</span>
-            <button type="button" data-difficulty="up">For nemt</button>
+            <button type="button" data-difficulty="down"><span aria-hidden="true">↓</span> For svært</button>
+            <span class="skip-summary"><span aria-hidden="true">↷</span> Sprunget over: <span id="skip-count">0</span></span>
+            <button type="button" data-difficulty="up"><span aria-hidden="true">↑</span> For nemt</button>
           </div>
         </section>
 
@@ -107,8 +111,8 @@
         <h2>Vil du starte forfra?</h2>
         <p>Alle stjerner og dit niveau bliver nulstillet.</p>
         <div class="dialog-actions">
-          <button value="cancel">Nej, behold dem</button>
-          <button class="confirm-reset" value="confirm">Ja, start forfra</button>
+          <button value="cancel"><span aria-hidden="true">←</span> Nej, behold dem</button>
+          <button class="confirm-reset" value="confirm"><span aria-hidden="true">↻</span> Ja, start forfra</button>
         </div>
       </form>
     </dialog>

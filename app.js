@@ -193,7 +193,7 @@ function renderStats() {
   elements.starCount.textContent = progress.correctProblems;
   elements.streakCount.textContent = progress.streak;
   elements.levelCount.textContent = progress.level;
-  elements.skipCount.textContent = `Sprunget over: ${progress.skippedProblems}`;
+  elements.skipCount.textContent = progress.skippedProblems;
 }
 
 function showProblem() {
