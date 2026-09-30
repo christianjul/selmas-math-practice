@@ -29,6 +29,7 @@ const createDefaultProgress = () => ({
   streak: 0,
   bestStreak: 0,
   questionsAtLevel: 0,
+  skippedProblems: 0,
   recentResults: [],
   operationStats: defaultOperationStats()
 });
@@ -40,6 +41,9 @@ const elements = {
   feedback: document.querySelector("#feedback"),
   checkButton: document.querySelector(".check-button"),
   keypadButtons: document.querySelectorAll(".number-pad button"),
+  difficultyButtons: document.querySelectorAll("[data-difficulty]"),
+  skipControls: document.querySelector("#skip-controls"),
+  skipCount: document.querySelector("#skip-count"),
   nextButton: document.querySelector("#next-button"),
   gameCard: document.querySelector(".game-card"),
   starCount: document.querySelector("#star-count"),
@@ -91,6 +95,7 @@ function isValidProgress(value) {
     isNonNegativeInteger(value.bestStreak) &&
     value.streak <= value.bestStreak &&
     isNonNegativeInteger(value.questionsAtLevel) &&
+    (value.skippedProblems === undefined || isNonNegativeInteger(value.skippedProblems)) &&
     Array.isArray(value.recentResults) &&
     value.recentResults.length <= MAX_HISTORY &&
     value.recentResults.every((result) => typeof result === "boolean") &&
@@ -101,7 +106,12 @@ function isValidProgress(value) {
 function loadProgress() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return isValidProgress(saved) ? saved : createDefaultProgress();
+    return isValidProgress(saved)
+      ? {
+          ...saved,
+          skippedProblems: saved.skippedProblems ?? 0
+        }
+      : createDefaultProgress();
   } catch {
     return createDefaultProgress();
   }
@@ -183,6 +193,7 @@ function renderStats() {
   elements.starCount.textContent = progress.correctProblems;
   elements.streakCount.textContent = progress.streak;
   elements.levelCount.textContent = progress.level;
+  elements.skipCount.textContent = `Sprunget over: ${progress.skippedProblems}`;
 }
 
 function showProblem() {
@@ -198,6 +209,7 @@ function showProblem() {
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
   elements.nextButton.hidden = true;
+  elements.skipControls.hidden = false;
   elements.gameCard.classList.remove("celebrate");
   elements.answer.focus();
 }
@@ -276,6 +288,7 @@ function setFinishedState() {
     button.disabled = true;
   });
   elements.nextButton.hidden = false;
+  elements.skipControls.hidden = true;
   elements.nextButton.focus();
 }
 
@@ -350,6 +363,23 @@ function resetProgress() {
   showProblem();
 }
 
+function skipProblem(direction) {
+  progress.skippedProblems += 1;
+  progress.level = Math.max(
+    MIN_LEVEL,
+    Math.min(MAX_LEVEL, progress.level + (direction === "up" ? 1 : -1))
+  );
+  progress.questionsAtLevel = 0;
+  progress.recentResults = [];
+  saveProgress();
+  renderStats();
+  showProblem();
+  elements.encouragement.textContent =
+    direction === "up"
+      ? `Så prøver vi niveau ${progress.level}.`
+      : `Vi gør det lidt lettere på niveau ${progress.level}.`;
+}
+
 function enterDigit(digit) {
   if (problemFinished || elements.answer.value.length >= 3) {
     return;
@@ -377,6 +407,9 @@ elements.keypadButtons.forEach((button) => {
       enterDigit(key);
     }
   });
+});
+elements.difficultyButtons.forEach((button) => {
+  button.addEventListener("click", () => skipProblem(button.dataset.difficulty));
 });
 elements.form.addEventListener("submit", handleSubmit);
 elements.nextButton.addEventListener("click", showProblem);

@@ -393,6 +393,41 @@ input:focus {
   background: #2daa7a;
 }
 
+.skip-controls {
+  margin-top: 18px;
+  padding-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  border-top: 2px solid #f1edf8;
+}
+
+.skip-controls button {
+  min-height: 44px;
+  padding: 8px 12px;
+  color: var(--purple-dark);
+  background: var(--purple-pale);
+  border: 0;
+  border-radius: 13px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.skip-controls button:active {
+  transform: scale(0.97);
+}
+
+.skip-controls span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .encouragement {
   margin-top: 18px;
   padding: 13px 20px;
@@ -558,6 +593,15 @@ dialog p {
 
   .number-pad button {
     min-height: 54px;
+  }
+
+  .skip-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .skip-controls span {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 }
 
